@@ -37,7 +37,7 @@ function transform(s1 : any[]){
 }
 
 
-
+//Y aqui esta la funcion ya todo junto y bien hecho
 function todoJunto(s1 : any[]){
 try{
 let aplanado = aplaneishon(s1);
@@ -46,9 +46,13 @@ let semihecho = convertToInt(aplanado);
 console.log(semihecho);
 let hecho = transform(semihecho);
 console.log(hecho);
+return hecho;
 }
 catch(Error){
   console.log(Error);
 }
 }
 let arrayy = todoJunto(Array3);
+
+
+export default todoJunto;
