@@ -1,30 +1,72 @@
-
-import { getQuery } from "oak/helpers.ts";
-import { RouterContext } from "oak/router.ts";
-import { booksCollection } from "../db/mongo.ts";
-import { BookSchema  } from "../db/schemas.ts";
+import { getQuery } from 'https://deno.land/x/oak/helpers.ts';
+import { RouterContext } from "https://deno.land/x/oak/mod.ts";
+import { booksCollection, usersCollection } from "../db/mongo.ts";
+import { BookSchema, UserSchema  } from "../db/schemas.ts";
+import { Database, ObjectId } from "https://deno.land/x/mongo@v0.31.1/mod.ts";
 
 type GetBooksContext = RouterContext<
-  "/Books",
+  "/getBooks",
   Record<string | number, string | undefined>,
   Record<string, any>
 >;
 
-export const getCars = async (context: GetBooksContext) => {
-    try {
-      const params = getQuery(context, { mergeParams: true });
-      const bookDB: BookSchema[] = await booksCollection
-        .find({ ...params })
-        .toArray();
-      const books = await Promise.all(
-        bookDB.map(async (book) => ({
-          ...book,
-          bookings: await booksCollection.find({ book: book.nombre }).toArray(),
-        }))
-      );
-      context.response.body = books;
-    } catch (error) {
-      context.response.status = 500;
-      context.response.body = { message: error.message };
+
+
+export const getBooks = async (context: GetBooksContext) => {
+  try{
+
+    const params = getQuery(context, { mergeParams: true });
+    if(!params.page){
+      throw new Error("Missing param page");
+      return;
     }
-  };
+    else{
+      if(params.title){
+      const bookDB   = await booksCollection.find({title: params.title}).skip(Number(params.page)*10).limit(10).toArray();
+      context.response.body = {
+        bookDB,
+      }
+  
+      }
+      else{
+      const bookDB: BookSchema[] = await booksCollection.find().skip(Number(params.page)*10).limit(10).toArray();
+      context.response.body = {
+        bookDB,
+      }
+  
+      }
+    
+    }
+}
+catch(error){
+  context.response.body = 404;
+  context.response.body = { error: error };
+  
+}
+};
+
+type GetUserContext = RouterContext<
+"/getUser/:id", {
+  id: string;
+} & Record<string | number, string | undefined>, 
+Record<string, any>>
+
+export const getUser = async (context: GetUserContext) => {
+  try{
+  if (context.params?.id) {
+    const user: UserSchema | undefined = await usersCollection.findOne({
+      _id: new ObjectId(context.params.id),
+    });
+
+    if (user) {
+      context.response.body = user;
+      return;
+    }
+  }
+
+  context.response.status = 404;
+}catch(error){
+  context.response.status = 404;
+  context.response.body = { error: error };
+}
+};

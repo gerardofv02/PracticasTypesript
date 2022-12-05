@@ -1,31 +1,32 @@
-
 import { MongoClient, Database } from "mongo";
-import {  BookSchema } from "./schemas.ts";
-
-import { config } from "std/dotenv/mod.ts";
+import { config } from "https://deno.land/x/dotenv@v3.2.0/mod.ts";
+import { UserSchema, BookSchema, AuthorSchema } from "./schemas.ts";
 
 await config({ export: true, allowEmptyValues: true });
 
-const connectMongoDB = async (): Promise<Database> => {
-  const mongo_usr = Deno.env.get("MONGO_USR");
-  const mongo_pwd = Deno.env.get("MONGO_PWD");
-  const db_name = Deno.env.get("DB_NAME");
+const client = new MongoClient();
 
-  if (!mongo_usr || !mongo_pwd || !db_name ) {
-    throw new Error(
-      "Missing environment variables, check env.sample for creating .env file"
-    );
-  }
+await client.connect({
+  db: Deno.env.get('DB_NAME'),
+  tls: true,
+  servers: [
+    {
+      host: Deno.env.get('MONGO_URI'),
+      port: Deno.env.get('PORT'),
+    },
+  ],
+  credential: {
+    username: Deno.env.get('MONGO_USR'),
+    password: Deno.env.get('MONGO_PWD'),
+    db: Deno.env.get('DB_NAME'),
+    mechanism: "SCRAM-SHA-1",
+  },
+});
 
-  const mongo_url = `mongodb+srv://${mongo_usr}:${mongo_pwd}/${db_name}?authMechanism=SCRAM-SHA-1`;
+const db = client.database(Deno.env.get('DB_NAME'));
+console.info("Mongodb connected");
 
-  const client = new MongoClient();
-  await client.connect(mongo_url);
-  const db = client.database(db_name);
-  return db;
-};
-
-const db = await connectMongoDB();
 console.info(`MongoDB ${db.name} connected`);
-
 export const booksCollection = db.collection<BookSchema>("Libreria");
+export const usersCollection = db.collection<UserSchema>("Usuarios");
+export const authorsCollection = db.collection<AuthorSchema>("Autores");
