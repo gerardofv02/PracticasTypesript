@@ -25,6 +25,6 @@ const connectMongoDB = async (): Promise<Database> => {
 const db = await connectMongoDB();
 console.info(`MongoDB ${db.name} connected`);
 
-export const CochesCollection = db.collection<cocheSchema>("Cohe");
+export const CochesCollection = db.collection<cocheSchema>("Coche");
 export const VendedorCollection = db.collection<vendedorSchema>("Vendedor");
-export const ConcesionarioCollection = db.collection<concesionarioSchema>("COncesionario");
+export const ConcesionarioCollection = db.collection<concesionarioSchema>("Concesionario");

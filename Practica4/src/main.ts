@@ -6,8 +6,9 @@ import { config } from "std/dotenv/mod.ts";
 await config({ export: true, allowEmptyValues: true });
 
 import { Query } from "./resolvers/query.ts";
-import { Mutation } from "./resolvers/mutation.ts";
+import { Mutation } from "./resolvers/mutation.ts"
 import { typeDefs } from "./schema.ts";
+
 const resolvers = {
   Query,
   Mutation,
