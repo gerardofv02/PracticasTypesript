@@ -1,3 +1,4 @@
+
 export type Coche = {
     id: string,
     matricula: string,
@@ -5,11 +6,11 @@ export type Coche = {
 }
 export type Vendedor = {
     id: string,
-    coches: Coche[],
+    coches: string[],
     nombre: string,
 }
 export type Concesionario = {
     id: string,
-    vendedores: Vendedor[],
+    vendedores: string[],
     campoComun: string,
 }

@@ -18,7 +18,7 @@ type Concesionario{
     campoComun: String!,
 }
 type Query{
-    obtenerVendedores(id: String!, nombre: String!): Vendedor! 
+    obtenerVendedores( nombre: String): [Vendedor!]! 
 }
 
 type Mutation{
