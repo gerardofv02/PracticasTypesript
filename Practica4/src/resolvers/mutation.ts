@@ -46,4 +46,33 @@ export const Mutation = {
           throw new Error(e);
         }
       },
+      addCoche: async ( _: unknown, args: { idCoche: string, idVendedor: string }): Promise<vendedorSchema> => {
+        try {
+          const { idCoche, idVendedor } = args;
+
+          const vendedor = await VendedorCollection.findOne({ _id: new ObjectId(args.idVendedor) });
+          if (!vendedor) {
+            throw new Error("Vendedor no encontrado en la DB");
+          }
+          const coche = await CochesCollection.findOne({ _id: new ObjectId(args.idCoche) });
+          if (!coche) {
+            throw new Error("Coche no encontrado en la DB");
+          }
+
+          const coches = vendedor.coches;
+          coches.push(coche._id.toString());
+
+          const _id = await VendedorCollection.updateOne(
+            { _id: new ObjectId(args.idVendedor) },
+            { $set: { coches  } }
+          );
+          return {
+            _id  :_id.upsertedId!,
+            coches: [],
+            nombre: vendedor.nombre
+          };
+        } catch (e) {
+          throw new Error(e);
+        }
+      },
 }
