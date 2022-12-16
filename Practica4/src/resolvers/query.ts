@@ -69,6 +69,10 @@ export const Query = {
                 { _id : new ObjectId(id),
                 });
 
+                if(!ConcesionarioDB){
+                    throw new Error("NO existe");
+                }
+
             return ConcesionarioDB;
 
         }catch(e){
