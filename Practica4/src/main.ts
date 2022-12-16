@@ -6,14 +6,16 @@ import { config } from "std/dotenv/mod.ts";
 await config({ export: true, allowEmptyValues: true });
 
 import { Query } from "./resolvers/query.ts";
-import { Mutation } from "./resolvers/mutation.ts"
-import{Vendedor} from "./resolvers/vendedor.ts"
+import { Mutation } from "./resolvers/mutation.ts";
+import{Vendedor} from "./resolvers/vendedor.ts";
+import{Coche} from "./resolvers/coche.ts";
 import { typeDefs } from "./schema.ts";
 
 const resolvers = {
   Query,
   Mutation,
-  Vendedor
+  Vendedor,
+  Coche,
 };
 
 const port = Number(Deno.env.get("PORT"));

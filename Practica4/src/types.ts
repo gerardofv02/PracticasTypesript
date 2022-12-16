@@ -1,4 +1,4 @@
-
+import{ObjectId} from "mongo";
 export type Coche = {
     id: string,
     matricula: string,
@@ -6,11 +6,12 @@ export type Coche = {
 }
 export type Vendedor = {
     id: string,
-    coches: string[],
+    coches: ObjectId[],
     nombre: string,
 }
 export type Concesionario = {
     id: string,
-    vendedores: string[],
-    campoComun: string,
+    nombre: string,
+    vendedores: ObjectId[],
+    localidad: string,
 }

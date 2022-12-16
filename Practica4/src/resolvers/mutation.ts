@@ -1,5 +1,5 @@
-import { CochesCollection, VendedorCollection } from "../db/mongo.ts";
-import { vendedorSchema,cocheSchema, } from "../db/schemas.ts";
+import { CochesCollection, VendedorCollection ,ConcesionarioCollection} from "../db/mongo.ts";
+import { vendedorSchema,cocheSchema,concesionarioSchema } from "../db/schemas.ts";
 import { Vendedor , Coche,Concesionario} from "../types.ts";
 import { ObjectId } from "mongo";
 
@@ -67,17 +67,44 @@ export const Mutation = {
           if (find) {
             throw new Error ("El vendedor ya tenia el coche")
           }
-          const coches = vendedor.coches;
-          coches.push(coche._id.toString());
 
-          const _id  = await VendedorCollection.updateOne(
+          const coches = vendedor.coches;
+          coches.push(coche._id);
+
+          const _id = await VendedorCollection.updateOne(
             { _id: new ObjectId(args.idVendedor) },
-            { $set: { coches   } }
+            { $set: { coches } }
           );
           return {
-            _id: _id.upsertedId!,
-            coches: [],
+            _id:_id.upsertedId!,
+            coches,
             nombre: vendedor.nombre
+          };
+        } catch (e) {
+          throw new Error(e);
+        }
+      },
+      crearConcesionario : async (_: unknown, args: { nombre: string, localidad: string}): Promise<concesionarioSchema> => {
+        try {
+          const { nombre, localidad } = args;
+          const exists = await ConcesionarioCollection.findOne({
+            nombre, localidad
+          });
+          if (exists) {
+            throw new Error("Ya existe el concesionario");
+          }
+  
+          const _id = await ConcesionarioCollection.insertOne({
+            nombre ,
+            localidad,
+            vendedores:[],
+          });
+
+          return {
+              _id,
+              nombre,
+              localidad,
+              vendedores:[],
           };
         } catch (e) {
           throw new Error(e);

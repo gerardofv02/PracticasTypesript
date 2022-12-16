@@ -15,7 +15,7 @@ type Vendedor{
 type Concesionario{
     id: String!,
     vendedores: [Vendedor!]!,
-    campoComun: String!,
+    localidad: String!,
 }
 type Query{
     obtenerVendedores_nombre( nombre: String!): [Vendedor!]! 
@@ -26,5 +26,6 @@ type Mutation{
     crearVendedor(nombre: String!): Vendedor!
     crearCoche(matricula: String!, precio: Int!): Coche!
     anadirCoche_Vendedor( idCoche: String!, idVendedor: String!): Vendedor!
+    crearConcesionario( nombre: String!, localidad: String!): Concesionario!
 }
 `;
