@@ -32,15 +32,14 @@ export const Mutation = {
           if (exists) {
             throw new Error("Ya existe el coche");
           }
-  
           const _id = await CochesCollection.insertOne({
             matricula,
             precio
           });
           return {
               _id,
-              precio,
               matricula,
+              precio,
           };
         } catch (e) {
           throw new Error(e);
@@ -68,15 +67,15 @@ export const Mutation = {
           if (find) {
             throw new Error ("El vendedor ya tenia el coche")
           }
-          const coches = vendedor.coches; 
+          const coches = vendedor.coches;
           coches.push(coche._id.toString());
 
-          const _id = await VendedorCollection.updateOne(
+          const _id  = await VendedorCollection.updateOne(
             { _id: new ObjectId(args.idVendedor) },
             { $set: { coches   } }
           );
           return {
-            _id  :_id.upsertedId!,
+            _id: _id.upsertedId!,
             coches: [],
             nombre: vendedor.nombre
           };

@@ -15,4 +15,4 @@ export const Vendedor = {
         throw new Error(e);
       }
     },
-  };
+};
