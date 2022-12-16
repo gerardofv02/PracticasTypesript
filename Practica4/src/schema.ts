@@ -25,5 +25,6 @@ type Query{
 type Mutation{
     crearVendedor(nombre: String!): Vendedor!
     crearCoche(matricula: String!, precio: Int!): Coche!
+    anadirCoche_Vendedor( idCoche: String!, idVendedor: String!): Vendedor!
 }
 `;

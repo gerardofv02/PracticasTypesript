@@ -46,7 +46,9 @@ export const Mutation = {
           throw new Error(e);
         }
       },
-      addCoche: async ( _: unknown, args: { idCoche: string, idVendedor: string }): Promise<vendedorSchema> => {
+      
+      
+      anadirCoche_Vendedor: async ( _: unknown, args: { idCoche: string, idVendedor: string }): Promise<vendedorSchema> => {
         try {
           const { idCoche, idVendedor } = args;
 
@@ -59,12 +61,19 @@ export const Mutation = {
             throw new Error("Coche no encontrado en la DB");
           }
 
-          const coches = vendedor.coches;
+          const find= vendedor.coches.find( (coches)  => {
+            return coches.toString() === args.idCoche
+            
+          });
+          if (find) {
+            throw new Error ("El vendedor ya tenia el coche")
+          }
+          const coches = vendedor.coches; 
           coches.push(coche._id.toString());
 
           const _id = await VendedorCollection.updateOne(
             { _id: new ObjectId(args.idVendedor) },
-            { $set: { coches  } }
+            { $set: { coches   } }
           );
           return {
             _id  :_id.upsertedId!,
@@ -75,4 +84,5 @@ export const Mutation = {
           throw new Error(e);
         }
       },
+      
 }

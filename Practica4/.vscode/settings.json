@@ -1,5 +1,5 @@
 {
     "deno.enable": true,
-    "deno.unstable": true,
+    "deno.unstable": false,
     "deno.importMap": "/home/jerry/Documentos/PracticasTypesript/Practica4/import_map.json"
 }

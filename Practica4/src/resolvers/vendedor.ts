@@ -4,7 +4,7 @@ import { cocheSchema, concesionarioSchema, vendedorSchema } from "../db/schemas.
 
 export const Vendedor = {
     id: (parent: vendedorSchema): string => parent._id.toString(),
-    coches: async (parent: vendedorSchema): Promise<cocheSchema[] | undefined> => {
+    coches: async (parent: vendedorSchema): Promise<cocheSchema[]> => {
       try {
         const arrayIds = parent.coches.map((id ) => new ObjectId(id));
         const coches = await CochesCollection.find({

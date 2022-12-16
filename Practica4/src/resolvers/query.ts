@@ -3,6 +3,7 @@ import { vendedorSchema } from "../db/schemas.ts";
 import { Vendedor } from "../types.ts";
 
 export const Query = {
+    
     obtenerVendedores_nombre: async (_:unknown, args: { nombre: string}): Promise<vendedorSchema[] | null>=>{
         try{
             const nombre = args.nombre;
@@ -16,4 +17,5 @@ export const Query = {
             console.log(e);
         }
     },
+    
 }
