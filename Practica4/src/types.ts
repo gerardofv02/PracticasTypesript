@@ -8,6 +8,7 @@ export type Vendedor = {
     id: string,
     coches: ObjectId[],
     nombre: string,
+    dni: string,
 }
 export type Concesionario = {
     id: string,

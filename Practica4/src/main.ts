@@ -9,6 +9,7 @@ import { Query } from "./resolvers/query.ts";
 import { Mutation } from "./resolvers/mutation.ts";
 import{Vendedor} from "./resolvers/vendedor.ts";
 import{Coche} from "./resolvers/coche.ts";
+import{Concesionario} from "./resolvers/concesionario.ts";
 import { typeDefs } from "./schema.ts";
 
 const resolvers = {
@@ -16,6 +17,7 @@ const resolvers = {
   Mutation,
   Vendedor,
   Coche,
+  Concesionario,
 };
 
 const port = Number(Deno.env.get("PORT"));
