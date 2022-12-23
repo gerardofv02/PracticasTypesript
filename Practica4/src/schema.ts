@@ -20,7 +20,7 @@ type Concesionario{
 }
 type Query{
     obtenerVendedores_nombre( nombre: String!): [Vendedor!]! 
-    obtenerVendedores_id( id: String!): [Vendedor!]! 
+    obtenerVendedores_id( id: String!): Vendedor! 
     obtenerCoches_id (id: String!):[Coche!]!
     obtenerCoches_rangoPrecio(precioMin: Int!, precioMax: Int!): [Coche!]!
     obtenerConcesionario_id( id: String!):[Coche!]!
