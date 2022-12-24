@@ -7,7 +7,7 @@ export const Query = {
     getUser : async(_:unknown ,args :{username:string}): Promise<usuarioSchema| undefined> => {
         try{
             const username = args.username;
-            const find = await UsuarioCollection.findOne({username:username})
+            const find = await UsuarioCollection.findOne({username:username});
             return find;
            
         }catch(e){
