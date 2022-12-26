@@ -26,6 +26,12 @@ const s = new Server({
       ? await GraphQLHTTP<Request>({
           schema: makeExecutableSchema({ resolvers, typeDefs }),
           graphiql: true,
+          context:(req) => {
+            const idioma = req.headers.get("idioma");
+            return{
+              idioma: idioma,
+            }
+          }
         })(req)
       : new Response("Not Found", { status: 404 });
   },

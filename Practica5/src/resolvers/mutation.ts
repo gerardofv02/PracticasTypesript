@@ -5,8 +5,9 @@ import{ObjectId} from "mongo";
 import * as bcrypt from "bcrypt";
 
 export const Mutation = {
-    createUser: async(_:unknown, args: {username:string, password:string}): Promise<usuarioSchema> =>{
+    createUser: async(_:unknown, args: {username:string, password:string},ctx: {idioma?: string}): Promise<usuarioSchema> =>{
         try{
+            console.log(ctx);
             const {username,password} = args;
             const exits = await UsuarioCollection.findOne({
                 username
@@ -20,6 +21,7 @@ export const Mutation = {
                 const _id = await UsuarioCollection.insertOne({
                     username,
                     password:hash,
+                    
                 });
                 return{
                     _id,
