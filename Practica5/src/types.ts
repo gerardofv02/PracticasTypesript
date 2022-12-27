@@ -2,8 +2,8 @@ export type Usuario = {
     id: string,
     username: string,
     password: string,
-    //idioma: string,
-    //fechaCreacion: string,
+    idioma: string,
+    fechaCreacion: Date,
 }
 export type Mensaje = {
     id:string,
