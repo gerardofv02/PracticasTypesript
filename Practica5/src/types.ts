@@ -10,6 +10,9 @@ export type Usuario = {
 }
 export type Mensaje = {
     id:string,
+    emisor: string,
     destinatario: string,
+    idioma: string,
+    fechaCreacion: Date,
     mensaje: string
 }

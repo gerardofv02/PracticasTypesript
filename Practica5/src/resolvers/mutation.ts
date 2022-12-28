@@ -82,22 +82,16 @@ export const Mutation = {
     },
     deleteUser:async(_:unknown,ctx:{Auth?:string}): Promise<usuarioSchema>=>{
         try{
-            const Auth = ctx.Auth;
-            console.log(Auth);
-            
-            if(Auth ==null){
-                throw new Error("No se ha introducido Auth");
+            if(ctx.Auth == null){
+                throw new Error("Auth mal introducido");
             }
             
             const comprobar = await verifyJWT(
-                Auth,
+                ctx.Auth || "",
                 Deno.env.get("JWT_SECRET")!,
             );
 
-            if(!comprobar){
-                throw new Error("TOken incorrecto");
-
-            }
+           
             const usuario = comprobar as Usuario;
 
             const find : usuarioSchema| undefined = await UsuarioCollection.findOne({
@@ -120,6 +114,69 @@ export const Mutation = {
         }
 
 
+    },
+    sendMessage:async(_:unknown,args: {destinatario: string, message: string}, ctx:{Auth?:string, idioma?: string}) : Promise<mensajeSchema> =>{
+        try {
+            if (ctx.Auth === null) {
+              throw new Error("Error con el Auth");
+            }
+      
+            if (ctx.idioma === null) {
+              throw new Error("Error con el idioma");
+            }
+      
+            const comprobar = await verifyJWT(
+              ctx.Auth || "",
+              Deno.env.get("JWT_SECRET")!,
+            );
+      
+            const emisor: Usuario = comprobar as Usuario;
+      
+            const encontrarUsuarioEmisor: usuarioSchema | undefined =
+              await UsuarioCollection.findOne({
+                _id: new ObjectId(emisor.id),
+            });
+      
+            if (!encontrarUsuarioEmisor) {
+              throw new Error("Usuario no encontrado");
+            }
+      
+            if (ctx.idioma !== encontrarUsuarioEmisor.idioma) {
+              throw new Error(
+                "El idioma no es el mismo",
+              );
+            }
+      
+            const encontrarReceptor: usuarioSchema | undefined =
+              await UsuarioCollection.findOne({
+                username: args.destinatario,
+              });
+      
+            if (!encontrarReceptor) {
+              throw new Error("Usuario no encontrado");
+            }
+      
+            const fechaCreacion = new Date();
+      
+            const _id = await MensajesCollection.insertOne({
+              emisor: encontrarUsuarioEmisor._id.toString(),
+              destinatario: encontrarReceptor._id.toString(),
+              idioma: ctx.idioma,
+              fechaCreacion: fechaCreacion,
+              mensaje: args.message,
+            });
+      
+            return {
+              _id: _id,
+              emisor: encontrarUsuarioEmisor._id.toString(),
+              destinatario: args.destinatario,
+              idioma: ctx.idioma,
+              fechaCreacion: fechaCreacion,
+              mensaje: args.message,
+            };
+          } catch (e) {
+            throw new Error(e);
+          }
     },
     
 }

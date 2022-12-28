@@ -11,7 +11,10 @@ type Usuario{
 }
 type Mensaje  {
     id:ID!,
+    emisor:String!,
     destinatario: String!,
+    idioma: String!,
+    fechaCreacion: String!,
     mensaje: String!,
 }
 
@@ -23,5 +26,6 @@ type Mutation{
     createUser(username: String!,password:String!): Usuario!
     login(username: String!, password:String!): String!
     deleteUser: Usuario!
+    sendMessage(destinatario:String!,message:String!) : Mensaje!
 }
 `;
