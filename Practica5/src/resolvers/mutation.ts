@@ -132,16 +132,16 @@ export const Mutation = {
       
             const emisor: Usuario = comprobar as Usuario;
       
-            const encontrarUsuarioEmisor: usuarioSchema | undefined =
+            const encontrarEmisor: usuarioSchema | undefined =
               await UsuarioCollection.findOne({
                 _id: new ObjectId(emisor.id),
             });
       
-            if (!encontrarUsuarioEmisor) {
+            if (!encontrarEmisor) {
               throw new Error("Usuario no encontrado");
             }
       
-            if (ctx.idioma !== encontrarUsuarioEmisor.idioma) {
+            if (ctx.idioma !== encontrarEmisor.idioma) {
               throw new Error(
                 "El idioma no es el mismo",
               );
@@ -159,17 +159,23 @@ export const Mutation = {
             const fechaCreacion = new Date();
       
             const _id = await MensajesCollection.insertOne({
-              emisor: encontrarUsuarioEmisor._id.toString(),
+              emisor: encontrarEmisor._id.toString(),
               destinatario: encontrarReceptor._id.toString(),
               idioma: ctx.idioma,
               fechaCreacion: fechaCreacion,
               mensaje: args.message,
             });
+            const mensajes = encontrarEmisor.mensajes;
+            mensajes.push(_id);
+            const __id = await UsuarioCollection.updateOne(
+              {_id : new ObjectId(encontrarEmisor._id)},
+              {$set: {mensajes}}
+            );
       
             return {
               _id: _id,
-              emisor: encontrarUsuarioEmisor._id.toString(),
-              destinatario: args.destinatario,
+              emisor: encontrarEmisor._id.toString(),
+              destinatario: encontrarReceptor._id.toString(),
               idioma: ctx.idioma,
               fechaCreacion: fechaCreacion,
               mensaje: args.message,
