@@ -80,7 +80,7 @@ export const Mutation = {
         
 
     },
-    deleteUser:async(_:unknown,ctx:{Auth?:string}): Promise<usuarioSchema>=>{
+    deleteUser:async (_:unknown,args:{},ctx:{Auth?:string}): Promise<usuarioSchema>=>{
         try{
             if(ctx.Auth === null){
                 throw new Error("Auth mal introducido");
@@ -95,6 +95,9 @@ export const Mutation = {
             const find : usuarioSchema| undefined = await UsuarioCollection.findOne({
                 _id : new ObjectId(usuario.id)
             });
+            await UsuarioCollection.deleteOne({
+              _id : new ObjectId(usuario.id)
+          });
             if(!find){
                 throw new Error("Usuario no encontrado");
             }
