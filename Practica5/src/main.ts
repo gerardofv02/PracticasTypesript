@@ -28,8 +28,10 @@ const s = new Server({
           graphiql: true,
           context:(req) => {
             const idioma = req.headers.get("idioma");
+            const Auth = req.headers.get("Auth");
             return{
               idioma: idioma,
+              Auth: Auth,
             }
           }
         })(req)

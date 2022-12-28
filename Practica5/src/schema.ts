@@ -7,6 +7,7 @@ type Usuario{
     password: String!,
     idioma: String!,
     fechaCreacion: String!,
+    mensajes: [Mensaje!],
 }
 type Mensaje  {
     id:ID!,
@@ -21,5 +22,6 @@ type Query{
 type Mutation{
     createUser(username: String!,password:String!): Usuario!
     login(username: String!, password:String!): String!
+    deleteUser: Usuario!
 }
 `;
