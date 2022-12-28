@@ -20,6 +20,7 @@ type Mensaje  {
 
 type Query{
     getUser(username:String!) : Usuario!
+    getMessages(page: Int,perPage: Int): [Mensaje!]!
 }
 
 type Mutation{

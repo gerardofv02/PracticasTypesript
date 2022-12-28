@@ -82,15 +82,13 @@ export const Mutation = {
     },
     deleteUser:async(_:unknown,ctx:{Auth?:string}): Promise<usuarioSchema>=>{
         try{
-            if(ctx.Auth == null){
+            if(ctx.Auth === null){
                 throw new Error("Auth mal introducido");
             }
-            
             const comprobar = await verifyJWT(
                 ctx.Auth || "",
                 Deno.env.get("JWT_SECRET")!,
-            );
-
+            );  
            
             const usuario = comprobar as Usuario;
 
